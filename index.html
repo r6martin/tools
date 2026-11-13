@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="UCSD tools for MMS/MTL teams: guided triage trees and references for Lecture Capture (Podcasting).">
+  <title>UCSD Tools</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ucsd-blue: #006a96;
+      --ucsd-blue-dark: #00496b;
+      --ucsd-gold: #ffcd00;
+      --ink: #1a1a1a;
+      --muted: #4a4a4a;
+      --line: #d9d9d9;
+      --bg: #f7f7f7;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: "Source Sans 3", "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+
+    .skip-link {
+      position: absolute;
+      left: -9999px;
+      top: 0;
+      background: #ffffff;
+      color: var(--ucsd-blue-dark);
+      padding: 0.6rem 1rem;
+      z-index: 10;
+    }
+
+    .skip-link:focus {
+      left: 0;
+    }
+
+    .site-header {
+      background: var(--ucsd-blue);
+      border-bottom: 6px solid var(--ucsd-gold);
+      color: #ffffff;
+    }
+
+    .header-inner {
+      max-width: 64rem;
+      margin: 0 auto;
+      padding: 2.25rem 1.25rem 1.75rem;
+    }
+
+    .header-eyebrow {
+      margin: 0 0 0.35rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #bfe1ef;
+    }
+
+    .header-inner h1 {
+      margin: 0;
+      font-size: 1.9rem;
+      line-height: 1.2;
+      color: #ffffff;
+    }
+
+    .header-sub {
+      margin: 0.4rem 0 0;
+      max-width: 42rem;
+      color: #d8eef7;
+    }
+
+    main {
+      max-width: 64rem;
+      margin: 0 auto;
+      padding: 2rem 1.25rem 3rem;
+    }
+
+    .section h2 {
+      margin: 0 0 1rem;
+      padding-bottom: 0.4rem;
+      border-bottom: 1px solid var(--line);
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .cards {
+      display: grid;
+      gap: 0.75rem;
+    }
+
+    .card {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 1rem 1.1rem;
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-left: 4px solid var(--ucsd-blue);
+      border-radius: 4px;
+      text-decoration: none;
+      color: var(--ink);
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .card:hover {
+      border-color: var(--ucsd-blue);
+      box-shadow: 0 2px 6px rgba(0, 73, 107, 0.15);
+    }
+
+    .card:focus-visible {
+      outline: 3px solid var(--ucsd-gold);
+      outline-offset: 2px;
+    }
+
+    .card h3 {
+      margin: 0;
+      font-size: 1.05rem;
+      line-height: 1.3;
+      color: var(--ucsd-blue-dark);
+    }
+
+    .card p {
+      margin: 0.25rem 0 0;
+      font-size: 0.92rem;
+      color: var(--muted);
+    }
+
+    .card-meta {
+      margin-top: 0.4rem;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 0.1rem 0.5rem;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--muted);
+      background: var(--bg);
+    }
+
+    .arrow {
+      flex: none;
+      margin-top: 0.1rem;
+      font-size: 1.15rem;
+      line-height: 1;
+      color: var(--ucsd-blue);
+    }
+
+    .site-footer {
+      max-width: 64rem;
+      margin: 0 auto;
+      padding: 1.5rem 1.25rem 2.5rem;
+      border-top: 1px solid var(--line);
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .site-footer a {
+      color: var(--ucsd-blue-dark);
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#content">Skip to content</a>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <p class="header-eyebrow">UC San Diego · EdTech</p>
+      <h1>UCSD Tools</h1>
+      <p class="header-sub">Tools for MMS/MTL teams, maintained by Robin Martin.</p>
+    </div>
+  </header>
+
+  <main id="content">
+    <section class="section" aria-labelledby="tools-heading">
+      <h2 id="tools-heading">Tools</h2>
+      <div class="cards">
+        <a class="card" href="lecture-capture/">
+          <div>
+            <h3>Lecture Capture Triage</h3>
+            <p>Guided triage tree for Lecture Capture (Podcasting) support issues, starting from the reported symptom.</p>
+            <div class="card-meta"><span class="tag">Interactive tool</span></div>
+          </div>
+          <span class="arrow" aria-hidden="true">&rarr;</span>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>Maintained by Robin Martin · <a href="https://github.com/r6martin/tools" target="_blank" rel="noopener">View repository on GitHub</a></p>
+  </footer>
+</body>
+</html>
