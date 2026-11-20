@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MTL Camera Availability</title>
+<style>
+  :root {
+    --bg: #f5f6f8; --ink: #1d2026; --muted: #6a7280; --line: #e3e6ea;
+    --green: #4caf7d; --yellow: #d9a13d; --orange: #DB7400; --red: #d32f2f;
+    --green-bg: #e2f2e8; --yellow-bg: #fbf0d7;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink);
+         font: 15px/1.45 -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+  .wrap { max-width: 1160px; margin: 0 auto; padding: 24px 20px 48px; }
+  header { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 14px;
+           margin-bottom: 6px; }
+  h1 { font-size: 20px; margin: 0; }
+  h2 { font-size: 14px; margin: 22px 0 10px; color: var(--ink); }
+  .sub { color: var(--muted); font-size: 13px; }
+  .legend { display: flex; flex-wrap: wrap; gap: 10px; margin: 12px 0 4px;
+            font-size: 12px; color: var(--muted); }
+  .legend .chip { display: inline-block; width: 12px; height: 12px;
+                  border-radius: 3px; margin-right: 5px; vertical-align: -1px;
+                  border: 1px solid var(--line); }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+          gap: 12px; }
+  .tile { border-radius: 8px; padding: 14px 16px; border: 1px solid var(--line);
+          display: flex; flex-direction: column; gap: 2px; min-height: 104px; }
+  .tile.green  { background: var(--green-bg); }
+  .tile.yellow { background: var(--yellow-bg); }
+  .tile.orange { background: #DB7400; border-color: #DB7400; color: #fff; }
+  .tile.red    { background: #d32f2f; border-color: #d32f2f; color: #fff; }
+  .type { font-size: 13px; font-weight: 600; line-height: 1.25; }
+  .count { font-size: 26px; font-weight: 650; font-variant-numeric: tabular-nums; }
+  .count span { font-size: 15px; font-weight: 500; color: var(--muted); }
+  .tile.orange .count span, .tile.red .count span { color: rgba(255, 255, 255, 0.75); }
+  .pct { font-size: 12px; color: var(--muted); }
+  .tile.orange .pct, .tile.red .pct { color: rgba(255, 255, 255, 0.85); }
+  .foot { margin-top: 20px; color: var(--muted); font-size: 12px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1 id="title"></h1>
+  <div class="sub" id="subtitle"></div>
+</header>
+<div class="legend">
+  <span><span class="chip" style="background: var(--green-bg); border-color: var(--green);"></span><span id="lg-green"></span></span>
+  <span><span class="chip" style="background: var(--yellow-bg); border-color: var(--yellow);"></span><span id="lg-yellow"></span></span>
+  <span><span class="chip" style="background: var(--orange); border-color: var(--orange);"></span><span id="lg-orange"></span></span>
+  <span><span class="chip" style="background: var(--red); border-color: var(--red);"></span><span id="lg-red"></span></span>
+</div>
+<div id="sections"></div>
+<div class="foot" id="foot"></div>
+</div>
+<script>
+const D = {"generated": "2026-11-20 1:32 PM", "labels": {"title": "Camera Availability", "subtitle": "Media Lab Equipment Checkout · as of 2026-11-20 1:32 PM", "video_heading": "Video & Cinema Cameras", "photo_heading": "Photo Cameras", "analog_photo_heading": "Analog Photo Cameras", "analog_video_heading": "Analog Video Cameras", "unit_word": "available", "upcoming_label": "{upcoming} reservations · next 2 days", "legend_green": "50-100% available", "legend_yellow": "30-50%", "legend_orange": "10-30%", "legend_red": "0-10%", "foot": ""}, "totals": {"units": 263, "types": 32, "out": 112}, "types": [{"type": "Canon C-100", "group": "video", "total": 17, "out": 14, "checkouts": 106, "upcoming": 15, "available": 3, "pct": 17.6, "band": "orange", "upcoming_label": "15 reservations · next 2 days"}, {"type": "Canon R7", "group": "photo", "total": 31, "out": 16, "checkouts": 62, "upcoming": 1, "available": 15, "pct": 48.4, "band": "yellow", "upcoming_label": "1 reservations · next 2 days"}, {"type": "Sony FX2", "group": "video", "total": 14, "out": 5, "checkouts": 55, "upcoming": 13, "available": 9, "pct": 64.3, "band": "green", "upcoming_label": "13 reservations · next 2 days"}, {"type": "Canon 6D mkII", "group": "photo", "total": 11, "out": 7, "checkouts": 50, "upcoming": 3, "available": 4, "pct": 36.4, "band": "yellow", "upcoming_label": "3 reservations · next 2 days"}, {"type": "Canon 5D MkIV", "group": "photo", "total": 12, "out": 7, "checkouts": 37, "upcoming": 3, "available": 5, "pct": 41.7, "band": "yellow", "upcoming_label": "3 reservations · next 2 days"}, {"type": "Canon R5 mkII", "group": "photo", "total": 14, "out": 3, "checkouts": 35, "upcoming": 1, "available": 11, "pct": 78.6, "band": "green", "upcoming_label": "1 reservations · next 2 days"}, {"type": "Canon XA70 Camcorders", "group": "video", "total": 6, "out": 6, "checkouts": 35, "upcoming": 2, "available": 0, "pct": 0.0, "band": "red", "upcoming_label": "2 reservations · next 2 days"}, {"type": "Blackmagic Pocket 6k Pro", "group": "video", "total": 10, "out": 4, "checkouts": 22, "upcoming": 0, "available": 6, "pct": 60.0, "band": "green", "upcoming_label": "0 reservations · next 2 days"}, {"type": "Sony a6400", "group": "photo", "total": 6, "out": 4, "checkouts": 22, "upcoming": 2, "available": 2, "pct": 33.3, "band": "yellow", "upcoming_label": "2 reservations · next 2 days"}, {"type": "Sony a7 IV", "group": "photo", "total": 10, "out": 8, "checkouts": 21, "upcoming": 2, "available": 2, "pct": 20.0, "band": "orange", "upcoming_label": "2 reservations · next 2 days"}, {"type": "Canon 5D MkIII", "group": "photo", "total": 13, "out": 8, "checkouts": 17, "upcoming": 2, "available": 5, "pct": 38.5, "band": "yellow", "upcoming_label": "2 reservations · next 2 days"}, {"type": "Sony a7 III", "group": "photo", "total": 10, "out": 8, "checkouts": 16, "upcoming": 0, "available": 2, "pct": 20.0, "band": "orange", "upcoming_label": "0 reservations · next 2 days"}, {"type": "Canon XA-10 Camcorders", "group": "video", "total": 3, "out": 2, "checkouts": 10, "upcoming": 1, "available": 1, "pct": 33.3, "band": "yellow", "upcoming_label": "1 reservations · next 2 days"}, {"type": "Sony a7 Siii - Video", "group": "video", "total": 10, "out": 1, "checkouts": 10, "upcoming": 0, "available": 9, "pct": 90.0, "band": "green", "upcoming_label": "0 reservations · next 2 days"}, {"type": "Pentax K1000 Cameras", "group": "photo_analog", "total": 9, "out": 7, "checkouts": 8, "upcoming": 0, "available": 2, "pct": 22.2, "band": "orange", "upcoming_label": "0 reservations · next 2 days"}, {"type": "Canon 35mm Film SLR", "group": "photo_analog", "total": 7, "out": 5, "checkouts": 7, "upcoming": 0, "available": 2, "pct": 28.6, "band": "orange", "upcoming_label": "0 reservations · next 2 days"}, {"type": "Blackmagic Pocket Cinema Camera HD", "group": "video", "total": 3, "out": 1, "checkouts": 5, "upcoming": 0, "available": 2, "pct": 66.7, "band": "green", "upcoming_label": "0 reservations · next 2 days"}, {"type": "Leica Q2 Monochrom Cameras", "group": "photo", "total": 4, "out": 0, "checkouts": 3, "upcoming": 0, "available": 4, "pct": 100.0, "band": "green", "upcoming_label": "0 reservations · next 2 days"}, {"type": "Sony NEX-FS700", "group": "video", "total": 5, "out": 0, "checkouts": 3, "upcoming": 0, "available": 5, "pct": 100.0, "band": "green", "upcoming_label": "0 reservations · next 2 days"}, {"type": "Canon C-200", "group": "video", "total": 2, "out": 0, "checkouts": 2, "upcoming": 0, "available": 2, "pct": 100.0, "band": "green", "upcoming_label": "0 reservations · next 2 days"}, {"type": "Fujifilm X-T5", "group": "photo", "total": 2, "out": 0, "checkouts": 2, "upcoming": 0, "available": 2, "pct": 100.0, "band": "green", "upcoming_label": "0 reservations · next 2 days"}, {"type": "GoPro Cameras", "group": "video", "total": 9, "out": 2, "checkouts": 2, "upcoming": 0, "available": 7, "pct": 77.8, "band": "green", "upcoming_label": "0 reservations · next 2 days"}, {"type": "GoPro MAX2 360 Action Cameras", "group": "video", "total": 2, "out": 1, "checkouts": 2, "upcoming": 0, "available": 1, "pct": 50.0, "band": "green", "upcoming_label": "0 reservations · next 2 days"}, {"type": "Nikon 35mm Film SLR", "group": "photo_analog", "total": 9, "out": 2, "checkouts": 2, "upcoming": 0, "available": 7, "pct": 77.8, "band": "green", "upcoming_label": "0 reservations · next 2 days"}, {"type": "Super 8mm Film Cameras", "group": "video_analog", "total": 3, "out": 1, "checkouts": 2, "upcoming": 1, "available": 2, "pct": 66.7, "band": "green", "upcoming_label": "1 reservations · next 2 days"}, {"type": "Sony NX3", "group": "video", "total": 3, "out": 0, "checkouts": 1, "upcoming": 0, "available": 3, "pct": 100.0, "band": "green", "upcoming_label": "0 reservations · next 2 days"}, {"type": "6x7 Cameras", "group": "photo_analog", "total": 2, "out": 0, "checkouts": 0, "upcoming": 0, "available": 2, "pct": 100.0, "band": "green", "upcoming_label": "0 reservations · next 2 days"}, {"type": "Bolex Cameras", "group": "video_analog", "total": 3, "out": 0, "checkouts": 0, "upcoming": 0, "available": 3, "pct": 100.0, "band": "green", "upcoming_label": "0 reservations · next 2 days"}, {"type": "Hasselblad Medium Format", "group": "photo_analog", "total": 2, "out": 0, "checkouts": 0, "upcoming": 0, "available": 2, "pct": 100.0, "band": "green", "upcoming_label": "0 reservations · next 2 days"}, {"type": "Holga Medium Format Film Cameras", "group": "photo_analog", "total": 26, "out": 0, "checkouts": 0, "upcoming": 0, "available": 26, "pct": 100.0, "band": "green", "upcoming_label": "0 reservations · next 2 days"}, {"type": "Horseman 985 Rangefinder 6x7 Cameras", "group": "photo_analog", "total": 1, "out": 0, "checkouts": 0, "upcoming": 0, "available": 1, "pct": 100.0, "band": "green", "upcoming_label": "0 reservations · next 2 days"}, {"type": "Mamiya 645 Film", "group": "photo_analog", "total": 4, "out": 0, "checkouts": 0, "upcoming": 0, "available": 4, "pct": 100.0, "band": "green", "upcoming_label": "0 reservations · next 2 days"}]};
+function esc(s) { return String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+function tileHTML(t) {
+  return `
+  <div class="tile ${t.band}">
+    <div class="type">${esc(t.type)}</div>
+    <div class="count">${t.available}<span> / ${t.total} ${esc(D.labels.unit_word)}</span></div>
+    <div class="pct">${esc(t.upcoming_label)}</div>
+  </div>`;
+}
+
+document.title = D.labels.title;
+document.getElementById('title').textContent = D.labels.title;
+document.getElementById('subtitle').textContent = D.labels.subtitle;
+document.getElementById('lg-green').textContent = D.labels.legend_green;
+document.getElementById('lg-yellow').textContent = D.labels.legend_yellow;
+document.getElementById('lg-orange').textContent = D.labels.legend_orange;
+document.getElementById('lg-red').textContent = D.labels.legend_red;
+
+const sections = [
+  {key: 'video', title: D.labels.video_heading},
+  {key: 'photo', title: D.labels.photo_heading},
+  {key: 'photo_analog', title: D.labels.analog_photo_heading},
+  {key: 'video_analog', title: D.labels.analog_video_heading},
+];
+const host = document.getElementById('sections');
+for (const s of sections) {
+  const list = D.types.filter(t => t.group === s.key)
+    .sort((a, b) => (b.checkouts - a.checkouts) || (a.pct - b.pct) ||
+                     a.type.localeCompare(b.type));
+  if (!list.length) continue;
+  const sec = document.createElement('section');
+  sec.innerHTML = '<h2>' + esc(s.title) + '</h2><div class="grid">' +
+                  list.map(tileHTML).join('') + '</div>';
+  host.appendChild(sec);
+}
+
+document.getElementById('foot').textContent = D.labels.foot;
+</script>
+</body>
+</html>
