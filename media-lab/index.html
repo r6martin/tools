@@ -3,6 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; connect-src https://n8n.tritonai.ucsd.edu; img-src 'self' data:; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
 <title>MTL Camera Availability</title>
 <style>
   :root {
@@ -52,6 +54,9 @@
   .lookahead .fill.yellow { background: var(--yellow); }
   .lookahead .fill.orange { background: #c35400; }
   .lookahead .fill.red    { background: #8e1616; }
+  .banner { display: none; margin: 10px 0 4px; padding: 8px 12px; border-radius: 6px;
+            background: var(--yellow-bg); border: 1px solid var(--yellow); font-size: 13px; }
+  .banner.show { display: block; }
   .foot { margin-top: 20px; color: var(--muted); font-size: 12px; }
 </style>
 </head>
@@ -61,6 +66,7 @@
   <h1 id="title"></h1>
   <div class="sub" id="subtitle"></div>
 </header>
+<div class="banner" id="banner" role="status" aria-live="polite"></div>
 <div class="legend">
   <span><span class="chip" style="background: var(--green-bg); border-color: var(--green);"></span><span id="lg-green"></span></span>
   <span><span class="chip" style="background: var(--yellow-bg); border-color: var(--yellow);"></span><span id="lg-yellow"></span></span>
@@ -70,76 +76,6 @@
 <div id="sections"></div>
 <div class="foot" id="foot"></div>
 </div>
-<script>
-const DATA_URL = "https://n8n.tritonai.ucsd.edu/webhook/media-lab-availability";
-const POLL_SECONDS = 300;
-
-function esc(s) { return String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
-
-function tileHTML(t, labels, windowEndShort) {
-  const raw = (labels.lookahead_label || '')
-    .replace('{free}', t.lookahead_free)
-    .replace('{total}', t.total)
-    .replace('{window_end_short}', windowEndShort);
-  const m = esc(raw).match(/^([0-9/]+) (.*)$/);
-  const label = m ? `<b>${m[1]}</b> ${m[2]}` : esc(raw);
-  return `
-  <div class="tile ${t.band}">
-    <div class="type">${esc(t.type)}</div>
-    <div class="count">${t.available}<span> / ${t.total} ${esc(labels.unit_word)}</span></div>
-    <div class="lookahead-label">${label}</div>
-  <div class="lookahead">
-    <div class="fill ${t.strip_band}" style="width: ${t.lookahead_pct}%"
-         aria-label="${esc(raw)}" title="${esc(raw)}"></div>
-  </div>
-</div>`;
-}
-
-function render(D) {
-  if (!D || !D.types) return;
-  document.title = D.labels.title;
-  document.getElementById('title').textContent = D.labels.title;
-  document.getElementById('subtitle').textContent = D.labels.subtitle;
-  document.getElementById('lg-green').textContent = D.labels.legend_green;
-  document.getElementById('lg-yellow').textContent = D.labels.legend_yellow;
-  document.getElementById('lg-orange').textContent = D.labels.legend_orange;
-  document.getElementById('lg-red').textContent = D.labels.legend_red;
-
-  const sections = [
-    {key: 'video', title: D.labels.video_heading},
-    {key: 'photo', title: D.labels.photo_heading},
-    {key: 'photo_analog', title: D.labels.analog_photo_heading},
-    {key: 'video_analog', title: D.labels.analog_video_heading},
-  ];
-  const host = document.getElementById('sections');
-  host.textContent = '';
-  for (const s of sections) {
-    const list = D.types.filter(t => t.group === s.key)
-      .sort((a, b) => (b.checkouts - a.checkouts) || (a.pct - b.pct) ||
-                       a.type.localeCompare(b.type));
-    if (!list.length) continue;
-    const sec = document.createElement('section');
-    sec.innerHTML = '<h2>' + esc(s.title) + '</h2><div class="grid">' +
-                    list.map(t => tileHTML(t, D.labels, D.window_end_short)).join('') + '</div>';
-    host.appendChild(sec);
-  }
-  document.getElementById('foot').textContent = D.labels.foot;
-}
-
-async function refresh() {
-  try {
-    const res = await fetch(DATA_URL, {cache: 'no-store'});
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    const D = await res.json();
-    render(D);
-  } catch (err) {
-    document.getElementById('subtitle').textContent =
-      'Live feed unavailable (' + err.message + ') - retrying...';
-  }
-}
-
-refresh();
-setInterval(refresh, POLL_SECONDS * 1000);
-</script>
+<script src="/media-lab/app.js"></script>
 </body>
 </html>
