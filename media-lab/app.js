@@ -53,6 +53,8 @@ function render(D) {
   document.title = String(L.title || "MTL Camera Availability");
   setText("title", L.title);
   setText("subtitle", L.subtitle);
+  const badge = document.getElementById("off-hours-badge");
+  if (badge) badge.style.display = D.offHours ? "inline-block" : "none";
   setText("lg-green", L.legend_green);
   setText("lg-yellow", L.legend_yellow);
   setText("lg-orange", L.legend_orange);
